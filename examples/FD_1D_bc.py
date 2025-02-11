@@ -2,10 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.tri as mtri
 from matplotlib.collections import LineCollection
+import os
+from utilities.options import configure_matplotib
+configure_matplotib()
 
-import utilities.plot_setup
-
-path_fig = "/home/andrea/PHD_github/LaTeXProjects/CandidatureISAE/imagesEqTr/"
+directory_results = "./results/"
+if not os.path.exists(directory_results):
+    os.makedirs(directory_results)
 
 def g(x):
     # x : array of spatial coordinates
@@ -55,7 +58,7 @@ u1_above_ct = f1(t_above_ct-x_above_ct/c)
 u2_above_ct = f2(t_above_ct-x_above_ct/c)
 u3_above_ct = f3(t_above_ct-x_above_ct/c)
 
-plot_surface = False
+plot_surface = True
 
 if plot_surface:
 
@@ -70,15 +73,15 @@ if plot_surface:
                     vmin=min_val1, vmax=max_val1, cmap="winter")
 
     ax.set_zlim(min_val1, max_val1)
-    ax.set_xlabel(r'Space')
-    ax.set_ylabel(r'Time')
-    ax.set_title(r'Solution $u(x, t)$')
+    ax.set_xlabel('Space')
+    ax.set_ylabel('Time')
+    ax.set_title('Solution $u(x, t)$')
     ax.view_init(azim=-120)
     ax.plot(c*t_vec, t_vec, np.zeros((len(t_vec), )), '-.r', linewidth=4, label=r'$\gamma$')
     ax.plot(np.zeros((len(t_vec), )), t_vec, f1(t_vec), '-.k', linewidth=4, label=r'$f(t)$')
     ax.legend()
 
-    plt.savefig(path_fig + "u_sol_f1.eps", format="eps", bbox_inches='tight')
+    plt.savefig(directory_results + "u_sol_f1.pdf", format="pdf", bbox_inches='tight')
 
     # Plot the second surface.
     resultant2 = np.concatenate([u_below_ct, u2_above_ct])
@@ -91,16 +94,16 @@ if plot_surface:
                     vmin=min_val2, vmax=max_val2, cmap="winter")
 
     ax.set_zlim(min_val2, max_val2)
-    ax.set_xlabel(r'Space')
-    ax.set_ylabel(r'Time')
-    ax.set_title(r'Solution $u(x, t)$')
+    ax.set_xlabel('Space')
+    ax.set_ylabel('Time')
+    ax.set_title('Solution $u(x, t)$')
     ax.view_init(azim=-120)
-    ax.plot(c*t_vec, t_vec, np.zeros((len(t_vec), )), '-.r', linewidth=4, label=r'$\gamma$')
-    ax.plot(np.zeros((len(t_vec), )), t_vec, f2(t_vec), '-.k', linewidth=4, label=r'$f(t)$')
+    ax.plot(c*t_vec, t_vec, np.zeros((len(t_vec), )), '-.r', linewidth=4, label='$\gamma$')
+    ax.plot(np.zeros((len(t_vec), )), t_vec, f2(t_vec), '-.k', linewidth=4, label='$f(t)$')
 
     ax.legend()
 
-    plt.savefig(path_fig + "u_sol_f2.eps", format="eps", bbox_inches='tight')
+    plt.savefig(directory_results + "u_sol_f2.pdf", format="pdf", bbox_inches='tight')
 
     # Plot the third surface.
     resultant3 = np.concatenate([u_below_ct, u3_above_ct])
@@ -113,14 +116,14 @@ if plot_surface:
                     vmin=min_val3, vmax=max_val3, cmap="winter")
 
     ax.set_zlim(min_val3, max_val3)
-    ax.set_xlabel(r'Space')
-    ax.set_ylabel(r'Time')
-    ax.set_title(r'Solution $u(x, t)$')
+    ax.set_xlabel('Space')
+    ax.set_ylabel('Time')
+    ax.set_title('Solution $u(x, t)$')
     ax.view_init(azim=-120)
-    ax.plot(c*t_vec, t_vec, np.zeros((len(t_vec), )), '-.r', linewidth=4, label=r'$\gamma$')
-    ax.plot(np.zeros((len(t_vec), )), t_vec, f3(t_vec), '-.k', linewidth=4, label=r'$f(t)$')
+    ax.plot(c*t_vec, t_vec, np.zeros((len(t_vec), )), '-.r', linewidth=4, label='$\gamma$')
+    ax.plot(np.zeros((len(t_vec), )), t_vec, f3(t_vec), '-.k', linewidth=4, label='$f(t)$')
     ax.legend()
 
-    plt.savefig(path_fig + "u_sol_f3.eps", format="eps", bbox_inches='tight')
+    plt.savefig(directory_results + "u_sol_f3.pdf", format="pdf", bbox_inches='tight')
 
     plt.show()

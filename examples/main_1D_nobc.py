@@ -1,6 +1,8 @@
 from FD_1D_nobc import mesh, u_0, ex_solution,animate_sol, \
     exp_time_aval_space, exp_time_amont_space, exp_time_centre_space, imp_time_amont_space
 import numpy as np
+from utilities.options import configure_matplotib
+configure_matplotib()
 
 if __name__ == '__main__':
 

@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 import matplotlib.tri as mtri
 from matplotlib.collections import LineCollection
 from matplotlib import animation
-import tutorials.utilities.plot_setup
+import os 
 
-path_fig = "/home/andrea/PHD_github/LaTeXProjects/CandidatureISAE/imagesEqTr/"
-path_video = "/home/andrea/Videos/PresEqTransport/"
+directory_results = "./results/"
+if not os.path.exists(directory_results):
+    os.makedirs(directory_results)
+
 
 
 def u_0(x):
@@ -33,14 +35,14 @@ def ex_solution(x_vec, t_vec, c, save_fig=False, plot_fig=False):
                     vmin=0, vmax=1, cmap="winter")
 
     ax.set_zlim(0, 1)
-    ax.set_xlabel(r'Space')
-    ax.set_ylabel(r'Time')
-    ax.set_title(r'Solution $u(x, t), \; c=$' + str(c))
+    ax.set_xlabel('Space')
+    ax.set_ylabel('Time')
+    ax.set_title(f'Solution $u(x, t), \\; c= {str(c)}$')
     ax.view_init(azim=-110)
     ax.plot(c*t_vec, t_vec, np.zeros((len(t_vec), )), '-.r', linewidth=4, label=r'$\gamma$')
     ax.legend()
     if save_fig:
-        plt.savefig(path_fig + "u_sol_nobcs.eps", format="eps", bbox_inches='tight')
+        plt.savefig(directory_results + "u_sol_nobcs.pdf", format="pdf", bbox_inches='tight')
     if plot_fig:
         plt.show()
 
@@ -58,11 +60,11 @@ def mesh(x_vec, t_vec, save_fig=False, plot_fig=False):
     segs2 = segs1.transpose(1, 0, 2)
     plt.gca().add_collection(LineCollection(segs1))
     plt.gca().add_collection(LineCollection(segs2))
-    ax.set_xlabel(r'Space')
-    ax.set_ylabel(r'Time')
+    ax.set_xlabel('Space')
+    ax.set_ylabel('Time')
 
     if save_fig:
-        plt.savefig(path_fig + "mesh.eps", format="eps", bbox_inches='tight')
+        plt.savefig(directory_results + "mesh.pdf", format="pdf", bbox_inches='tight')
     if plot_fig:
         plt.show()
     else:
@@ -93,8 +95,8 @@ def animate_sol(x_vec, t_vec, u_num, c, sig, save_anim = False):
         cord_ann = (x_max, max_sol)
 
     ax = plt.axes(xlim=(x_min, x_max), ylim=(min_plot_sol, max_plot_sol))
-    ax.set_xlabel(r'Space')
-    ax.set_title(r'$c=' + str(c) + ",\quad \sigma=" + str(sig) + "$")
+    ax.set_xlabel('Space')
+    ax.set_title(f"$c={str(c)},\\quad \\sigma= {str(sig)}$")
     # line, = ax.plot([], [], lw=2)
 
     # initialization function: plot the background of each frame
@@ -108,13 +110,14 @@ def animate_sol(x_vec, t_vec, u_num, c, sig, save_anim = False):
 
     # animation function.  This is called sequentially
     def animate(i):
-        ax.lines.clear()
+        for art in list(ax.lines):
+            art.remove()
 
         # line.set_data(x_vec, u_num[:, i])
         # line.set_data(x_vec, u_0(x_vec-c*t_vec[i]))
         ax.plot(x_vec, u_num[:, i], 'b', label="numerical")
         ax.plot(x_vec, u_0(x_vec-c*t_vec[i]), 'r', label="exact")
-        ax.set_title(r'$c=' + str(c) + ",\quad \sigma=" + str(sig) + ", \quad t=" + '{0:.2}'.format(t_vec[i]) + ".$")
+        ax.set_title(f"$c= {str(c)}, \\quad \\sigma= {str(sig)}, \\quad t= {t_vec[i]:.2f}$")
 
         ax.legend(loc=loc_str, frameon=False)
 
@@ -131,7 +134,7 @@ def animate_sol(x_vec, t_vec, u_num, c, sig, save_anim = False):
     # http://matplotlib.sourceforge.net/api/animation_api.html
     if save_anim:
         name_vid = input("Name video : ")
-        anim.save(path_video + name_vid + '.mp4', fps=20, extra_args=['-vcodec', 'libx264'])
+        anim.save(directory_results + name_vid + '.mp4', fps=20, extra_args=['-vcodec', 'libx264'])
 
     plt.show()
 
